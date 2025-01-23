@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+
+        .upload-guidelines {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .upload-guidelines h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-guidelines h3 img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .upload-guidelines ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0 0 0;
+        }
+
+        .upload-guidelines li {
+            color: #34495e;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .upload-guidelines li:before {
+            content: "•";
+            color: #3498db;
+            position: absolute;
+            left: 0;
+        }
+
+        .upload-section {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .file-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .choose-file-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .choose-file-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .file-status {
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .analyze-btn {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 40px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .analyze-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .analyze-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Results section */
+        .results-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .emotion-result {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin: 30px 0;
+        }
+
+        .suggestions {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .suggestions h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .suggestions ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+            color: #34495e;
+        }
+
+        #fileInput {
+            display: none;
+        }
+        .suggestions {
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .suggestions h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .suggestions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .suggestions li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .suggestions strong {
+            color: #2c3e50;
+        }
+     .recommendations {
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            width:100%;
+            margin-top: 20px;
+        }
+        .recommendations h2 {
+            color: #3498db;
+            margin-top: 0;
+            text-align: center;
+        }
+        .recommendations h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: calc(33% - 20px);
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card h4 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .card p {
+            flex-grow: 1;
+        }
+        .card a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+        .activities-list {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .activities-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .activities-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+           .navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a4a6a 100%);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  .navbar ul li {
+    margin: 0 15px;
+    position: relative;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFF;
+    transition: all 0.3s ease;
+  }
+
+  .navbar ul li a:hover::after {
+    width: 70%;
+    left: 15%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+  }
+
+  .login-btn {
+    background-color: #E74C3C;
+    border-radius: 25px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 0;
+    }
+
+    .navbar ul {
+      margin-right: 20px;
+    }
+
+    .navbar ul li {
+      margin: 0 8px;
+    }
+
+    .navbar ul li a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+  }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Emotion Recognition Logo">
+    </div>
+    <ul>
+        <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="/AboutUs"><i class="fas fa-info-circle"></i>About Us</a></li>
+        <li><a href="/Demo"><i class="fas fa-microchip"></i>Try Demo</a></li>
+        <li><a href="/Blog"><i class="fas fa-blog"></i>Blog</a></li>
+        <li><a href="/Contact"><i class="fas fa-envelope"></i>Contact</a></li>
+        {% if not logged_in %}
+            <li><a href="/login" class="login-btn"><i class="fas fa-sign-in-alt"></i>Login</a></li>
+        {% else %}
+            <li><a href="/profile"><i class="fas fa-user"></i>Profile</a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<h1><br><br></h1>
+<h1><br><br></h1>
+    <div class="main-container">
+        <h1>Speech Emotion Recognition</h1>
+
+        <div class="upload-guidelines">
+            <h3>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233498db'%3E%3Cpath d='M12 2L2 22h20L12 2zm1 15h-2v2h2v-2zm0-8h-2v6h2V9z'/%3E%3C/svg%3E" alt="Guidelines">
+                Upload Guidelines
+            </h3>
+            <ul>
+                <li>Supported formats: WAV, MP3, M4A</li>
+                <li>Maximum file size: 10MB</li>
+                <li>Recommended duration: 5-30 seconds</li>
+                <li>Please ensure clear audio quality for better results</li>
+            </ul>
+        </div>
+
+        <form action="/Audio" method="POST" enctype="multipart/form-data">
+            <div class="upload-section">
+                <div class="file-input-container">
+                    <input type="file" id="fileInput" name="audio_file" accept="audio/*" hidden>
+                    <button type="button" class="choose-file-btn" onclick="document.getElementById('fileInput').click()">
+                        Choose Audio File
+                    </button>
+                    <div class="file-status">No file selected</div>
+                </div>
+                <button type="submit" class="analyze-btn" disabled>Analyze Emotion</button>
+            </div>
+        </form>
+
+        {% if predicted_emotion %}
+        <div class="results-section show">
+            <div class="emotion-result">
+                Detected Emotion: <strong>{{ predicted_emotion }}</strong>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="emotionChart"></canvas>
+            </div>
+
+             {% if suggestions %}
+        <div class="recommendations">
+            <h2>Personalized Recommendations</h2>
+            <p class="center">Based on the dominant emotion detected ({{ dominant_emotion }}), here are some recommendations that might be helpful:</p>
+
+            <h3>Websites to Explore</h3>
+            <div class="card-container">
+                {% for website in suggestions.websites %}
+                <div class="card">
+                    <h4>{{ website.name }}</h4>
+                    <p>{{ website.description }}</p>
+                    <a href="{{ website.url }}" target="_blank">Visit Website</a>
+                </div>
+                {% endfor %}
+                {% for i in range(3 - suggestions.websites|length) %}
+                <div class="card">
+                    <h4>Additional Resource {{ i + 1 }}</h4>
+                    <p>Explore more resources related to {{ dominant_emotion }} emotions.</p>
+                    <a href="#" target="_blank">Discover More</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3>Recommended Books</h3>
+            <div class="card-container">
+                {% for book in suggestions.books %}
+                <div class="card">
+                    <h4>{{ book.title }}</h4>
+                    <p>By {{ book.author }}</p>
+                    <p>{{ book.description }}</p>
+                </div>
+                {% endfor %}
+                {% for i in range(3 - suggestions.books|length) %}
+                <div class="card">
+                    <h4>More Reading</h4>
+                    <p>Discover additional books to help you understand and manage {{ dominant_emotion }} emotions.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3>Music Playlists</h3>
+            <div class="card-container">
+                {% for playlist in suggestions.playlists %}
+                <div class="card">
+                    <h4>{{ playlist.name }}</h4>
+                    <p>{{ playlist.description }}</p>
+                    <p>Platform: {{ playlist.platform }}</p>
+                    <a href="{{ playlist.url }}" target="_blank">Listen Now</a>
+                </div>
+                {% endfor %}
+                {% for i in range(3 - suggestions.playlists|length) %}
+                <div class="card">
+                    <h4>Discover More Music</h4>
+                    <p>Find more playlists to match or enhance your {{ dominant_emotion }} mood.</p>
+                    <a href="#" target="_blank">Explore Playlists</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3>Suggested Activities</h3>
+            <div class="activities-list">
+                <ul>
+                    {% for activity in suggestions.activities %}
+                    <li>{{ activity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('fileInput');
+        const fileStatus = document.querySelector('.file-status');
+        const analyzeBtn = document.querySelector('.analyze-btn');
+
+        fileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                fileStatus.textContent = this.files[0].name;
+                analyzeBtn.disabled = false;
+            } else {
+                fileStatus.textContent = 'No file selected';
+                analyzeBtn.disabled = true;
+            }
+        });
+
+        {% if emotion_probs %}
+        // Chart rendering
+        const ctx = document.getElementById('emotionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ emotion_labels | safe }},
+                datasets: [{
+                    label: 'Emotion Confidence (%)',
+                    data: {{ emotion_values | safe }},
+                    backgroundColor: [
+                        '#FF6B6B',  // angry
+                        '#4ECDC4',  // happy
+                        '#45B7D1',  // sad
+                        '#96CEB4',  // neutral
+                        '#FFEEAD',  // fearful
+                        '#D4A5A5',  // disgusted
+                        '#FFE66D'   // surprised
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Confidence (%)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

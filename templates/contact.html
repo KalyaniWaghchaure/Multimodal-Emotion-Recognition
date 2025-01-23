@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')}}">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.contact {
+    position: relative;
+    min-height: 100vh;
+    padding: 50px 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background color:#EE82EE;
+    background-position: center;
+    background-size: cover;
+}
+.contact .content {
+    max-width: 800px;
+    text-align: center;
+}
+.contact .content h2 {
+    font-size: 36px;
+    font-weight: 500;
+    color: #fff;
+}
+.contact .content p {
+    font-weight: 300;
+    color: #fff;
+}
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+.container .contactinfo {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.container .contactinfo .box {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+}
+.container .contactinfo .box .icon {
+    min-width: 60px;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 22px;
+}
+.container .contactinfo .box .text {
+    display: flex;
+    margin-left: 20px;
+    font-size: 16px;
+    color: #fff;
+    flex-direction: column;
+    font-weight: 300;
+}
+.container .contactinfo .box .text h3 {
+    font-weight: 500;
+    color: #00bcd4;
+}
+.contactform {
+    width: 40%;
+    padding: 40px;
+    background: #fff;
+}
+.contactform h2 {
+    font-size: 30px;
+    color: #333;
+    font-weight: 500;
+}
+.contactform .inputbox {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+}
+.contactform .inputbox input,
+.contactform .inputbox textarea {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 2px solid #333;
+    outline: none;
+}
+.contactform .inputbox label {
+    position: absolute;
+    left: 0;
+    padding: 5px 0;
+    font-size: 18px; /* Increased font size */
+    margin: 10px 0;
+    pointer-events: none;
+    transition: 0.5s;
+    font-weight: bold;
+    color: black; /* Set label color to black */
+}
+.contactform .inputbox input:focus + label,
+.contactform .inputbox input:not(:placeholder-shown) + label,
+.contactform .inputbox textarea:focus + label,
+.contactform .inputbox textarea:not(:placeholder-shown) + label {
+    transform: translateY(-20px);
+    font-size: 14px; /* Increased font size */
+    font-weight: bold; /* Ensure font-weight stays bold */
+    color: black; /* Ensure label color stays black */
+}
+    .logo {
+  color: var(--color-white);
+  font-size: 30px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+</style>
+</head>
+<body class="bg-nav" style="background-color:#FFE4E1;" >
+<section class="contact">
+    <table style="width:100%">
+        <tr>
+            <td colspan="6" align="center" class="logo">
+               <h3></h3>
+            </td>
+        </tr>
+    </table>
+    <div class="content">
+        <h2 style="color:black;">Contact Us</h2>
+        <p></p>
+    </div>
+    <div class="container">
+        <div class="contactinfo">
+            <div class="box">
+                <div class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+                <div class="text">
+                    <h3>Address</h3>
+                    <p>Railway Station Road,<br>Sambhajinagar,<br>431001</p>
+                </div>
+            </div>
+            <div class="box">
+                <div class="icon"><i class="fa fa-phone"></i></div>
+                <div class="text">
+                    <h3>Phone</h3>
+                    <p>+91 1234567890</p>
+                </div>
+            </div>
+            <div class="box">
+                <div class="icon"><i class="fa fa-envelope-o"></i></div>
+                <div class="text">
+                    <h3>E-mail</h3>
+                    <p>ContactUs@gmail.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="contactform">
+            {% if success_message %}
+            <div class="success-message">
+                {{ success_message }}
+            </div>
+            {% endif %}
+            <form id="contactForm" action="{{ url_for('Contact') }}" method="post">
+                <h2>Send Message</h2>
+                <div class="inputbox">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email:</label>
+                </div>
+                <div class="inputbox">
+                    <textarea id="message" name="message" rows="4" cols="50" required></textarea>
+                    <label for="message">Message:</label>
+                </div>
+                <div class="inputbox">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
+<!--<script>-->
+<!--    document.getElementById("contactForm").addEventListener("submit", function(event) {-->
+<!--        event.preventDefault();-->
+<!--        var formData = new FormData(this);-->
+
+<!--        fetch("/submit_contact", {-->
+<!--            method: "POST",-->
+<!--            body: formData-->
+<!--        }).then(response => response.json())-->
+<!--          .then(data => {-->
+<!--              if (data.message === "Success") {-->
+<!--                  alert("Your response has been successfully submitted.");-->
+<!--                  document.getElementById("contactForm").reset(); // Clear the form-->
+<!--              } else {-->
+<!--                  alert("There was a problem submitting your response. Please try again.");-->
+<!--              }-->
+<!--          }).catch(error => {-->
+<!--              console.error('Error:', error);-->
+<!--              alert("There was a problem submitting your response. Please try again.");-->
+<!--          });-->
+<!--    });-->
+<!--</script>-->
+

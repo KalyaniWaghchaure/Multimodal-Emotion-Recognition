@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --background-color: #f3f4f6;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h2 {
+            color: var(--text-color);
+            font-size: 1.875rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .col-md-4 {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .col-md-8 {
+            flex: 2;
+            min-width: 320px;
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-pic {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            padding: 4px;
+            background: white;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-control-file {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px dashed var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .section-divider {
+            border-top: 1px solid var(--border-color);
+            margin: 2rem 0;
+            padding-top: 1rem;
+        }
+
+        .password-section {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .password-section h5 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+
+            .col-md-4, .col-md-8 {
+                width: 100%;
+            }
+        }
+.navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a4a6a 100%);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  .navbar ul li {
+    margin: 0 15px;
+    position: relative;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFF;
+    transition: all 0.3s ease;
+  }
+
+  .navbar ul li a:hover::after {
+    width: 70%;
+    left: 15%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+  }
+
+  .login-btn {
+    background-color: #E74C3C;
+    border-radius: 25px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 0;
+    }
+
+    .navbar ul {
+      margin-right: 20px;
+    }
+
+    .navbar ul li {
+      margin: 0 8px;
+    }
+
+    .navbar ul li a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+  }
+
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Emotion Recognition Logo">
+    </div>
+    <ul>
+        <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="/AboutUs"><i class="fas fa-info-circle"></i>About Us</a></li>
+        <li><a href="/Demo"><i class="fas fa-microchip"></i>Try Demo</a></li>
+        <li><a href="/Blog"><i class="fas fa-blog"></i>Blog</a></li>
+        <li><a href="/Contact"><i class="fas fa-envelope"></i>Contact</a></li>
+        {% if not logged_in %}
+            <li><a href="/login" class="login-btn"><i class="fas fa-sign-in-alt"></i>Login</a></li>
+        {% else %}
+            <li><a href="/profile"><i class="fas fa-user"></i>Profile</a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<h1><br>
+    <br></h1>
+
+<h1><br>
+    </h1>
+    <div class="container">
+        <h2>Update Your Profile</h2>
+
+        <div class="row">
+            <!-- Profile Picture Upload -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="profile-pic-container">
+                            <h5>Profile Picture</h5>
+                            {% if user['profile_picture'] %}
+                                <img src="{{ url_for('static', filename='uploads/profile_pictures/' + user['profile_picture']) }}"
+                                     class="profile-pic" alt="Profile Picture">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default_profile.png') }}"
+                                     class="profile-pic" alt="Default Profile Picture">
+                            {% endif %}
+
+                            <form action="{{ url_for('upload_profile_picture') }}" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="file" class="form-control-file" name="profile_picture" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Upload New Picture</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Information Update -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ url_for('update_profile') }}" method="post">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                       value="{{ user['name'] }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                       value="{{ user['email'] }}" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="age">Age</label>
+                                        <input type="number" class="form-control" id="age" name="age"
+                                               value="{{ user['age'] }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="gender">Gender</label>
+                                        <select class="form-control" id="gender" name="gender">
+                                            <option value="">Select Gender</option>
+                                            <option value="male" {% if user['gender'] == 'male' %}selected{% endif %}>Male</option>
+                                            <option value="female" {% if user['gender'] == 'female' %}selected{% endif %}>Female</option>
+                                            <option value="other" {% if user['gender'] == 'other' %}selected{% endif %}>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation">Occupation</label>
+                                <input type="text" class="form-control" id="occupation" name="occupation"
+                                       value="{{ user['occupation'] }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone"
+                                       value="{{ user['phone'] }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3">{{ user['address'] }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mental_health_history">Mental Health History (Optional)</label>
+                                <textarea class="form-control" id="mental_health_history" name="mental_health_history" rows="3">{{ user['mental_health_history'] }}</textarea>
+                            </div>
+
+                            <div class="password-section">
+                                <h5>Change Password</h5>
+                                <div class="form-group">
+                                    <label for="current_password">Current Password</label>
+                                    <input type="password" class="form-control" id="current_password" name="current_password">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="new_password">New Password</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<br><br>
+  <br>
+<section class="footer">
+  <div class="footer-row">
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul class="links">
+        <li><a href="#">Our Technology</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Features</h4>
+      <ul class="links">
+        <li><a href="#">Facial Expression Analysis</a></li>
+        <li><a href="#">Voice Tone Detection</a></li>
+        <li><a href="#">Text Sentiment Analysis</a></li>
+        <li><a href="#">Multimodal Integration</a></li>
+        <li><a href="#">Real-time Processing</a></li>
+        <li><a href="#">Custom Solutions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul class="links">
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Tutorials</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Stay Connected</h4>
+      <p>
+        Subscribe to our newsletter for updates on emotion recognition technology,
+        research insights, and exclusive offers.
+      </p>
+      <form action="#">
+        <input type="email" placeholder="Your email" required>
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+      <div class="icons">
+        <i class="fa-brands fa-facebook-f"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-github"></i>
+      </div>
+    </div>
+  </div>
+
+</section>
+  <style>
+    .footer {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #10182F;
+      border-radius: 6px;
+    }
+
+    .footer .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 3.5rem;
+      padding: 60px;
+    }
+
+    .footer-row .footer-col h4 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    .footer-col .links {
+      margin-top: 20px;
+    }
+
+    .footer-col .links li {
+      list-style: none;
+      margin-bottom: 10px;
+    }
+
+    .footer-col .links li a {
+      text-decoration: none;
+      color: #bfbfbf;
+    }
+
+    .footer-col .links li a:hover {
+      color: #fff;
+    }
+
+    .footer-col p {
+      margin: 20px 0;
+      color: #bfbfbf;
+      max-width: 300px;
+    }
+
+    .footer-col form {
+      display: flex;
+      gap: 5px;
+    }
+
+    .footer-col input {
+      height: 40px;
+      border-radius: 6px;
+      background: none;
+      width: 100%;
+      outline: none;
+      border: 1px solid #7489C6;
+      caret-color: #fff;
+      color: #fff;
+      padding-left: 10px;
+    }
+
+    .footer-col input::placeholder {
+      color: #ccc;
+    }
+
+    .footer-col form button {
+      background: #fff;
+      outline: none;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .footer-col form button:hover {
+      background: #cecccc;
+    }
+
+    .footer-col .icons {
+      display: flex;
+      margin-top: 30px;
+      gap: 30px;
+      cursor: pointer;
+    }
+
+    .footer-col .icons i {
+      color: #afb6c7;
+    }
+
+    .footer-col .icons i:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .footer .footer-row {
+        padding: 20px;
+        gap: 1rem;
+      }
+
+      .footer-col form {
+        display: block;
+      }
+
+      .footer-col form :where(input, button) {
+        width: 100%;
+      }
+
+      .footer-col form button {
+        margin: 10px 0 0 0;
+      }
+    }
+</style>
+
+
+</body>
+</html>

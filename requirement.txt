@@ -1,0 +1,7 @@
+flask
+torch
+numpy
+opencv-python
+pillow
+facenet-pytorch
+transformers

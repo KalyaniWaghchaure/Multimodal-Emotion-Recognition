@@ -1,0 +1,25 @@
+{
+    "image_recognition": {
+        "avg_processing_time": 5.953442811965942,
+        "std_processing_time": 0.0,
+        "avg_confidence": 0.9877966046333313,
+        "face_detection_rate": 1.0
+    },
+    "video_recognition": {
+        "avg_processing_time": 66.17844605445862,
+        "std_processing_time": 0.0,
+        "avg_fps": 2.1003817449206363,
+        "min_fps": 2.1003817449206363,
+        "max_fps": 2.1003817449206363
+    },
+    "live_recognition": {
+        "avg_frame_time": 0.24449560642242432,
+        "std_frame_time": 0.22807584848388143,
+        "avg_fps": 3.9242435437879197,
+        "face_detection_rate": 0.9916666666666667,
+        "emotion_distribution": {
+            "Neutral": 107,
+            "Happy": 12
+        }
+    }
+}

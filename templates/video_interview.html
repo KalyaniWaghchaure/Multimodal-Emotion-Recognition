@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Interview - Emotion Recognition</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .video-container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            margin: 0 auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        #video_feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Video Interview Emotion Analysis</h1>
+
+        <div class="bg-white rounded-lg shadow p-6 mb-8 max-w-2xl mx-auto">
+            <h2 class="text-xl font-semibold mb-3">Instructions:</h2>
+            <ul class="list-disc pl-5 space-y-2">
+                <li>Position yourself in front of the camera with good lighting</li>
+                <li>The recording will run for 60 seconds</li>
+                <li>Try to express natural emotions during the interview</li>
+                <li>Results will be displayed automatically when complete</li>
+            </ul>
+        </div>
+
+        <div class="text-center my-6">
+            <div id="status" class="text-xl font-semibold text-blue-600 mb-4">
+                Initializing camera...
+            </div>
+            <div id="timer" class="text-2xl font-bold text-green-600">
+                Time remaining: 60s
+            </div>
+        </div>
+
+        <div class="video-container">
+            <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Video feed">
+        </div>
+
+        <div id="loading" class="hidden text-center mt-8">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+            <p class="mt-4 text-lg">Processing results...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let startTime = Date.now();
+            let duration = 60000; // 60 seconds
+            let timerElement = document.getElementById('timer');
+            let statusElement = document.getElementById('status');
+            let loadingElement = document.getElementById('loading');
+            let isRedirecting = false;
+
+            // Function to check if interview is complete
+           function checkInterviewStatus() {
+    fetch('/check_interview_status')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'complete') {
+                window.location.href = '/video_interview_results';
+            } else {
+                setTimeout(checkInterviewStatus, 1000);
+            }
+        });
+}
+
+// Start checking status after a short delay
+setTimeout(checkInterviewStatus, 1000);
+
+            // Update timer and check status
+            let timerInterval = setInterval(function() {
+                let elapsedTime = Date.now() - startTime;
+                let remainingTime = Math.max(0, Math.ceil((duration - elapsedTime) / 1000));
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    statusElement.textContent = 'Recording complete!';
+                    timerElement.textContent = 'Processing...';
+                    loadingElement.classList.remove('hidden');
+
+                    // Start checking for results
+                    let statusCheck = setInterval(function() {
+                        checkInterviewStatus();
+                    }, 1000);
+
+                    // Timeout after 10 seconds if no redirect
+                    setTimeout(function() {
+                        clearInterval(statusCheck);
+                        if (!isRedirecting) {
+                            window.location.href = "{{ url_for('video_interview_results') }}";
+                        }
+                    }, 10000);
+                } else {
+                    timerElement.textContent = `Time remaining: ${remainingTime}s`;
+                    statusElement.textContent = 'Recording in progress...';
+                }
+            }, 1000);
+
+            // Handle video feed errors
+            document.getElementById('video_feed').onerror = function() {
+                statusElement.textContent = 'Error accessing camera. Please check permissions.';
+                statusElement.classList.remove('text-blue-600');
+                statusElement.classList.add('text-red-600');
+                clearInterval(timerInterval);
+            };
+        });
+    </script>
+</body>
+</html>

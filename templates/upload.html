@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Emotion Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color:#85959d;
+            color: #333;
+        }
+        .navbar {
+      width: 100%;
+      background-color: #333;
+      padding: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 40px;
+    }
+
+    .navbar ul li {
+      margin: 0 20px;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .navbar ul li a:hover {
+      background-color: #575757;
+      border-radius: 5px;
+      transform: scale(1.1);
+    }
+
+    .logo img {
+      margin-right: 10px;
+    }
+
+    .logo span {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .file-input-wrapper .btn-file-input {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+ <nav class="navbar">
+        <div class="logo">
+            <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Logo" style="width: 200px; height: auto;">
+        </div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/AboutUs">About Us</a></li>
+            <li><a href="/Blog">Blog</a></li>
+            <li><a href="/Contact">Contact</a></li>
+            {% if not logged_in %}
+                <li><a href="/login">Login</a></li>
+            {% else %}
+                <li><a href="/Profile">Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+ <h2><br><br></h2>
+ <h2><br><br></h2>
+
+    <div class="container">
+        <h2>Upload Video for Emotion Analysis</h2>
+        <div class="info-box">
+            <h3>Important Information:</h3>
+            <ul>
+                <li>Accepted video formats: .mp4, .avi, .mov</li>
+                <li>Maximum file size: 16MB</li>
+                <li>Recommended video duration: 30-60 seconds</li>
+                <li>Ensure good lighting and a clear view of your face for best results</li>
+            </ul>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="file-input-wrapper">
+                <button class="btn-file-input">Choose File</button>
+                <input type="file" name="file" accept=".mp4,.avi,.mov">
+            </div>
+            <br>
+            <input type="submit" value="Upload and Analyze">
+        </form>
+    </div>
+</body>
+</html>

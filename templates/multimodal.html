@@ -1,0 +1,287 @@
+<!-- templates/multimodal.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal Emotion Recognition</title>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .intro-text {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .input-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-section i {
+            font-size: 1.5em;
+            color: #4299e1;
+        }
+
+        .input-description {
+            color: #718096;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .file-upload {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 2em;
+            color: #4299e1;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 120px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+            color: #c53030;
+        }
+
+        .alert-warning {
+            background-color: #fffff0;
+            border-left: 4px solid #ecc94b;
+            color: #975a16;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3182ce;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multimodal Emotion Recognition</h1>
+
+        <p class="intro-text">
+            Upload an image, record audio, or enter text to analyze emotions across different modalities.
+            Our AI system will combine these inputs to provide comprehensive emotion analysis.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'info-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data" id="emotion-form">
+            <div class="input-grid">
+                <div class="input-section">
+                    <h2><i class="fas fa-image"></i> Image Input</h2>
+                    <p class="input-description">Upload a clear photo containing a face for emotion analysis</p>
+                    <div class="file-upload">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <span>Click or drag image here</span>
+                        <input type="file" name="image_file" accept="image/*" onchange="showFileName(this, 'image')">
+                        <div class="file-name" id="image-file-name"></div>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <h2><i class="fas fa-microphone"></i> Audio Input</h2>
+                    <p class="input-description">Upload an audio file of speech for emotion analysis</p>
+                    <div class="file-upload">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <span>Click or drag audio file here</span>
+                        <input type="file" name="audio_file" accept="audio/*" onchange="showFileName(this, 'audio')">
+                        <div class="file-name" id="audio-file-name"></div>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <h2><i class="fas fa-font"></i> Text Input</h2>
+                    <p class="input-description">Enter text to analyze its emotional content</p>
+                    <textarea name="text" placeholder="Type or paste your text here..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" onclick="showLoading()">
+                <i class="fas fa-search"></i> Analyze Emotions
+            </button>
+        </form>
+
+        <div class="loading" id="loading-indicator">
+            <div class="loading-spinner"></div>
+            <p>Analyzing your inputs...</p>
+        </div>
+    </div>
+
+    <script>
+        function showFileName(input, type) {
+            const fileName = input.files[0]?.name;
+            if (fileName) {
+                document.getElementById(`${type}-file-name`).textContent = fileName;
+            }
+        }
+
+        function showLoading() {
+            const form = document.getElementById('emotion-form');
+            const loading = document.getElementById('loading-indicator');
+
+            if (form.checkValidity()) {
+                loading.style.display = 'block';
+                form.style.opacity = '0.5';
+            }
+        }
+    </script>
+</body>
+</html>

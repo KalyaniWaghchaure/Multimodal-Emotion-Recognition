@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylish Blog Page</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f4f9;
+      overflow-x: hidden;
+    }
+
+    /* Blurred Background Image */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?nature,landscape') no-repeat center center/cover;
+      filter: blur(10px);
+      z-index: -1;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 100px auto 50px;
+      padding: 0 15px;
+    }
+
+   .navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a4a6a 100%);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  .navbar ul li {
+    margin: 0 15px;
+    position: relative;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFF;
+    transition: all 0.3s ease;
+  }
+
+  .navbar ul li a:hover::after {
+    width: 70%;
+    left: 15%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+  }
+
+  .login-btn {
+    background-color: #E74C3C;
+    border-radius: 25px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 0;
+    }
+
+    .navbar ul {
+      margin-right: 20px;
+    }
+
+    .navbar ul li {
+      margin: 0 8px;
+    }
+
+    .navbar ul li a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+  }
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 150px 10px;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      animation: fadeInSlideDown 1.2s ease-in-out;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: textReveal 1.5s ease forwards;
+    }
+
+    .hero p {
+      font-size: 24px;
+      margin-bottom: 20px;
+      animation: fadeInSlideUp 1.5s ease-in-out;
+    }
+
+    .hero button {
+      background: #ff6347;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s ease, transform 0.3s ease;
+      animation: fadeInSlideUp 2s ease;
+    }
+
+    .hero button:hover {
+      background: #ff4500;
+      transform: scale(1.05);
+    }
+
+    /* Blog Section */
+    .blog-posts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 50px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .post {
+      background: white;
+      width: calc(33.333% - 40px);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .post img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .post h2 {
+      font-size: 24px;
+      margin: 20px 0 10px;
+      color: #333;
+    }
+
+    .post p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .post a {
+      text-decoration: none;
+      color: #ff6347;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .post a:hover {
+      color: #ff4500;
+    }
+
+    /* Read More Button Animation */
+    .post a::after {
+      content: '';
+      display: block;
+      height: 3px;
+      background: #ff6347;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    .post a:hover::after {
+      width: 100%;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeInSlideUp 1.5s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeInSlideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes textReveal {
+      0% {
+        color: transparent;
+        border-right: 4px solid #fff;
+      }
+      80% {
+        color: transparent;
+        border-right: 4px solid #fff;
+      }
+      100% {
+        color: white;
+        border: none;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .post {
+        width: calc(50% - 20px);
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .post {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+        <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Emotion Recognition Logo">
+    </div>
+    <ul>
+        <li><a href="/" ><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="/AboutUs"><i class="fas fa-info-circle"></i>About Us</a></li>
+        <li><a href="/Demo"><i class="fas fa-microchip"></i>Try Demo</a></li>
+        <li><a href="/Blog" class="active"><i class="fas fa-blog"></i>Blog</a></li>
+        <li><a href="/Contact"><i class="fas fa-envelope"></i>Contact</a></li>
+    </ul>
+</nav>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to My Blog</h1>
+    <p>Discover amazing stories and insights about design, tech, and lifestyle.</p>
+    <button>Get Started</button>
+  </section>
+
+  <!-- Blog Posts -->
+  <div class="container">
+    <div class="blog-posts">
+      <!-- Blog Post 1 -->
+      <div class="post">
+        <img src="https://firebasestorage.googleapis.com/v0/b/imentiv-assets/o/assets%2F2fb7a457-09c1-48b9-a64a-1328cf01dfceuser%20emotions%20(1).jpg?alt=media&token=bc80bb72-fe69-42e4-91c7-ec033ff26e6d?w=1200&q=75" alt="Post Image 1">
+        <h2>Exploring the Valence-Arousal Model in Video Analysis with Emotion AI</h2>
+
+      </div>
+      <!-- Blog Post 2 -->
+      <div class="post">
+        <img src="https://firebasestorage.googleapis.com/v0/b/imentiv-assets/o/assets%2F4b34b0ed-d252-4a55-a7b3-d7878bd17e18emotions.jpg?alt=media&token=0a71ead7-4599-426d-b0c8-41a973ad4d64?w=1200&q=75" alt="Post Image 2">
+        <h2>Measuring Emotional Engagement: Analyzing Viewers' Reactions with the Emotion Graph</h2>
+
+      </div>
+      <!-- Blog Post 3 -->
+      <div class="post">
+        <img src="https://firebasestorage.googleapis.com/v0/b/imentiv-assets/o/assets%2F9b048c5b-30fa-4438-9017-33672a402593pexels-seej-nguyen-249333-755416%20(1).jpg?alt=media&token=89cff5ad-c881-442a-a66c-d2441951cfca?w=1200&q=75" alt="Post Image 3">
+        <h2>Understanding Imentiv's Audio Emotion Recognition: Key Insights and Top Use Cases</h2>
+
+      </div>
+    </div>
+  </div>
+
+  <section class="footer">
+  <div class="footer-row">
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul class="links">
+        <li><a href="#">Our Technology</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Features</h4>
+      <ul class="links">
+        <li><a href="#">Facial Expression Analysis</a></li>
+        <li><a href="#">Voice Tone Detection</a></li>
+        <li><a href="#">Text Sentiment Analysis</a></li>
+        <li><a href="#">Multimodal Integration</a></li>
+        <li><a href="#">Real-time Processing</a></li>
+        <li><a href="#">Custom Solutions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul class="links">
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Tutorials</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Stay Connected</h4>
+      <p>
+        Subscribe to our newsletter for updates on emotion recognition technology,
+        research insights, and exclusive offers.
+      </p>
+      <form action="#">
+        <input type="email" placeholder="Your email" required>
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+      <div class="icons">
+        <i class="fa-brands fa-facebook-f"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-github"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <style>
+    /* Your footer styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .footer {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #10182F;
+      border-radius: 6px;
+    }
+
+    .footer .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 3.5rem;
+      padding: 60px;
+    }
+
+    .footer-row .footer-col h4 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    .footer-col .links {
+      margin-top: 20px;
+    }
+
+    .footer-col .links li {
+      list-style: none;
+      margin-bottom: 10px;
+    }
+
+    .footer-col .links li a {
+      text-decoration: none;
+      color: #bfbfbf;
+    }
+
+    .footer-col .links li a:hover {
+      color: #fff;
+    }
+
+    .footer-col p {
+      margin: 20px 0;
+      color: #bfbfbf;
+      max-width: 300px;
+    }
+
+    .footer-col form {
+      display: flex;
+      gap: 5px;
+    }
+
+    .footer-col input {
+      height: 40px;
+      border-radius: 6px;
+      background: none;
+      width: 100%;
+      outline: none;
+      border: 1px solid #7489C6;
+      caret-color: #fff;
+      color: #fff;
+      padding-left: 10px;
+    }
+
+    .footer-col input::placeholder {
+      color: #ccc;
+    }
+
+    .footer-col form button {
+      background: #fff;
+      outline: none;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .footer-col form button:hover {
+      background: #cecccc;
+    }
+
+    .footer-col .icons {
+      display: flex;
+      margin-top: 30px;
+      gap: 30px;
+      cursor: pointer;
+    }
+
+    .footer-col .icons i {
+      color: #afb6c7;
+    }
+
+    .footer-col .icons i:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .footer .footer-row {
+        padding: 20px;
+        gap: 1rem;
+      }
+
+      .footer-col form {
+        display: block;
+      }
+
+      .footer-col form :where(input, button) {
+        width: 100%;
+      }
+
+      .footer-col form button {
+        margin: 10px 0 0 0;
+      }
+    }
+    </style>
+</body>
+</html>
+
+
+

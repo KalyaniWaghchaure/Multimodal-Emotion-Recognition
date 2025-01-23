@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ activity.title }} | Activities</title>
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='css/activity.css') }}">-->
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.activity-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activity-header {
+    text-align: center;
+}
+
+.activity-header .icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.activity-header h1 {
+    font-size: 32px;
+    margin: 10px 0;
+    color: #333;
+}
+
+.activity-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+.activity-section {
+    margin: 30px 0;
+}
+
+.activity-section h2 {
+    font-size: 24px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.activity-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.activity-section li {
+    font-size: 16px;
+    margin: 8px 0;
+    color: #444;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <div class="activity-container">
+        <!-- Header Section -->
+        <header class="activity-header">
+            <div class="icon">
+                <i class="{{ activity.icon }}"></i> {{ activity.mood_boost }}
+            </div>
+            <h1>{{ activity.title }}</h1>
+            <p>{{ activity.description }}</p>
+        </header>
+
+        <!-- Benefits Section -->
+        <section class="activity-section">
+            <h2>Benefits</h2>
+            <ul>
+                {% for benefit in activity.benefits %}
+                <li>{{ benefit }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="activity-section">
+            <h2>Tips for Effective Journaling</h2>
+            <ul>
+                {% for tip in activity.tips %}
+                <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Suggested Prompts Section -->
+        <section class="activity-section">
+            <h2>Suggested Prompts</h2>
+            <ul>
+                {% for prompt in activity.suggested_prompts %}
+                <li>{{ prompt }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Back Link -->
+        <div class="back-link">
+            <a href="{{ url_for('explore_activities') }}">← Back to Activities</a>
+        </div>
+    </div>
+</body>
+</html>

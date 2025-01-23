@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Multimodal Emotion System</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color:#85959d;
+      color: #333;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Header Animation */
+    header {
+      background-color:black ;
+      text-align: center;
+      color: white;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      animation: slideInTop 1.5s ease;
+    }
+
+    @keyframes slideInTop {
+      from {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+ .navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a4a6a 100%);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  .navbar ul li {
+    margin: 0 15px;
+    position: relative;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFF;
+    transition: all 0.3s ease;
+  }
+
+  .navbar ul li a:hover::after {
+    width: 70%;
+    left: 15%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+  }
+
+  .login-btn {
+    background-color: #E74C3C;
+    border-radius: 25px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 0;
+    }
+
+    .navbar ul {
+      margin-right: 20px;
+    }
+
+    .navbar ul li {
+      margin: 0 8px;
+    }
+
+    .navbar ul li a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+  }
+
+    @keyframes fadeInSection {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .about-section h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: grey;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .about-section p {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    /* Team Section Fade-Up Animation */
+    .team {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      padding: 20px;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .team-member {
+      text-align: center;
+      width: 250px;
+      margin: 20px;
+      padding: 20px;
+      background-color:gray;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+
+    .team-member:hover {
+      transform: translateY(-10px);
+    }
+
+    .team-member img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .team-member img:hover {
+      transform: rotate(360deg);
+    }
+
+    .team-member h3 {
+      font-size: 22px;
+      color: white;
+      margin-bottom: 10px;
+      font-family: 'Verdana', sans-serif;
+    }
+
+    .team-member p {
+      font-size: 16px;
+      color: #777;
+      font-style: italic;
+    }
+
+    /* Footer Animation */
+    .footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      animation: fadeInBottom 1s ease;
+    }
+
+    @keyframes fadeInBottom {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+   <nav class="navbar">
+    <div class="logo">
+        <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Emotion Recognition Logo">
+    </div>
+    <ul>
+        <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="/AboutUs" class="active"><i class="fas fa-info-circle"></i>About Us</a></li>
+        <li><a href="/Demo"><i class="fas fa-microchip"></i>Try Demo</a></li>
+        <li><a href="/Blog"><i class="fas fa-blog"></i>Blog</a></li>
+        <li><a href="/Contact"><i class="fas fa-envelope"></i>Contact</a></li>
+    </ul>
+</nav>
+  </header>
+  <h1><br><br></h1>
+  <h1><br><br></h1>
+  <h1><br><br></h1>
+  <h1 style="color:black; text-align:center;">About Us - Multimodal Emotion System</h1>
+    <p style="color:black; text-align:center;">Empowering technology to understand emotions</p>
+<h1><br><br></h1>
+  <div class="about-section">
+    <h1 style="text-align: center; color: black;">Our System</h1>
+    <p>
+      The Multimodal Emotion Detection System is designed to revolutionize how machines understand human emotions. By integrating data from facial expressions, speech, body language, and text inputs, our system provides accurate and real-time emotion detection. This helps improve interactions in various domains such as mental health, customer service, and human-computer interaction.
+    </p>
+    <h1 style="text-align: center; color: black;">Our Vision</h1>
+    <p>
+      At Multimodal Emotion Recognition, we believe that understanding emotions is key to enhancing human interactions, improving mental health, and fostering better communication in both personal and professional settings.
+    </p>
+    <h1 style="text-align: center; color: black;">Key Features</h1>
+    <p style="text-align: center;">
+      - Real-time emotion tracking<br>
+      - Multi-modal analysis for enhanced accuracy<br>
+      - User-friendly web interface<br>
+      - Secure and privacy-focused design
+    </p>
+  </div>
+
+  <!-- Team Section -->
+  <div class="team">
+    <div class="team-member">
+      <h3>Kalyani Waghchaure</h3>
+    </div>
+    <div class="team-member">
+      <h3>Sakshi Rampallewar</h3>
+    </div>
+    <div class="team-member">
+      <h3>Tanuja Shihare</h3>
+    </div>
+  </div>
+
+  <section class="footer">
+  <div class="footer-row">
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul class="links">
+        <li><a href="#">Our Technology</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Features</h4>
+      <ul class="links">
+        <li><a href="#">Facial Expression Analysis</a></li>
+        <li><a href="#">Voice Tone Detection</a></li>
+        <li><a href="#">Text Sentiment Analysis</a></li>
+        <li><a href="#">Multimodal Integration</a></li>
+        <li><a href="#">Real-time Processing</a></li>
+        <li><a href="#">Custom Solutions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul class="links">
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Tutorials</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Stay Connected</h4>
+      <p>
+        Subscribe to our newsletter for updates on emotion recognition technology,
+        research insights, and exclusive offers.
+      </p>
+      <form action="#">
+        <input type="email" placeholder="Your email" required>
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+      <div class="icons">
+        <i class="fa-brands fa-facebook-f"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-github"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <style>
+    /* Your footer styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .footer {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #10182F;
+      border-radius: 6px;
+    }
+
+    .footer .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 3.5rem;
+      padding: 60px;
+    }
+
+    .footer-row .footer-col h4 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    .footer-col .links {
+      margin-top: 20px;
+    }
+
+    .footer-col .links li {
+      list-style: none;
+      margin-bottom: 10px;
+    }
+
+    .footer-col .links li a {
+      text-decoration: none;
+      color: #bfbfbf;
+    }
+
+    .footer-col .links li a:hover {
+      color: #fff;
+    }
+
+    .footer-col p {
+      margin: 20px 0;
+      color: #bfbfbf;
+      max-width: 300px;
+    }
+
+    .footer-col form {
+      display: flex;
+      gap: 5px;
+    }
+
+    .footer-col input {
+      height: 40px;
+      border-radius: 6px;
+      background: none;
+      width: 100%;
+      outline: none;
+      border: 1px solid #7489C6;
+      caret-color: #fff;
+      color: #fff;
+      padding-left: 10px;
+    }
+
+    .footer-col input::placeholder {
+      color: #ccc;
+    }
+
+    .footer-col form button {
+      background: #fff;
+      outline: none;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .footer-col form button:hover {
+      background: #cecccc;
+    }
+
+    .footer-col .icons {
+      display: flex;
+      margin-top: 30px;
+      gap: 30px;
+      cursor: pointer;
+    }
+
+    .footer-col .icons i {
+      color: #afb6c7;
+    }
+
+    .footer-col .icons i:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .footer .footer-row {
+        padding: 20px;
+        gap: 1rem;
+      }
+
+      .footer-col form {
+        display: block;
+      }
+
+      .footer-col form :where(input, button) {
+        width: 100%;
+      }
+
+      .footer-col form button {
+        margin: 10px 0 0 0;
+      }
+    }
+    </style>
+</body>
+</html>
+
+
+

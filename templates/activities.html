@@ -1,0 +1,516 @@
+<!-- activities.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personalized Activities</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #818cf8;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f3f4f6;
+            --card-background: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .activities-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .emotion-header {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+        }
+
+        .emotion-indicator {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        .activities-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .activity-card {
+            background: var(--card-background);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .activity-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .activity-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .meta-tag {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .category-tag {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .intensity-tag {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .duration-tag {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .mood-boost {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+        }
+
+        .filters-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .filter-button.active {
+            background-color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-group {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="activities-container">
+        <!-- Emotion Header -->
+        <div class="emotion-header">
+            <h2>Your Current Mood: {{ current_emotion.capitalize() }}</h2>
+            <div class="emotion-indicator">
+                {% if current_emotion == 'happy' %}😊
+                {% elif current_emotion == 'sad' %}😢
+                {% elif current_emotion == 'angry' %}😠
+                {% elif current_emotion == 'anxious' %}😰
+                {% else %}😐
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <h3>Filter Activities</h3>
+            <div class="filter-group">
+                <button class="filter-button active" data-filter="all">All</button>
+                <button class="filter-button" data-filter="physical">Physical</button>
+                <button class="filter-button" data-filter="creative">Creative</button>
+                <button class="filter-button" data-filter="mindfulness">Mindfulness</button>
+            </div>
+            <div class="filter-group">
+                <button class="filter-button" data-intensity="low">Low Intensity</button>
+                <button class="filter-button" data-intensity="medium">Medium Intensity</button>
+                <button class="filter-button" data-intensity="high">High Intensity</button>
+            </div>
+        </div>
+
+        <!-- Emotion-Based Activities -->
+        <div class="activities-section">
+            <h2 class="section-title">Recommended for Your Current Mood</h2>
+            <div class="activities-grid">
+                {% for activity in emotion_activities %}
+                <div class="activity-card">
+    <a href="{{ activity.url }}">
+        <div class="activity-icon">
+            <i class="{{ activity.icon }}"></i>
+        </div>
+        <div class="mood-boost">{{ activity.mood_boost }}</div>
+        <h3 class="activity-title">{{ activity.title }}</h3>
+        <p class="activity-description">{{ activity.description }}</p>
+        <div class="activity-meta">
+            <span class="meta-tag category-tag">{{ activity.category }}</span>
+        </div>
+    </a>
+</div>
+
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Age-Based Activities -->
+        <div class="activities-section">
+            <h2 class="section-title">Activities for Your Age Group</h2>
+            <div class="activities-grid">
+                {% for activity in age_activities %}
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="{{ activity.icon }}"></i>
+                    </div>
+                    <h3 class="activity-title">{{ activity.title }}</h3>
+                    <p class="activity-description">{{ activity.description }}</p>
+                    <div class="activity-meta">
+                        <span class="meta-tag category-tag">{{ activity.category }}</span>
+                        <span class="meta-tag intensity-tag">{{ activity.intensity }}</span>
+                        <span class="meta-tag duration-tag">{{ activity.duration }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('profile') }}" class="filter-button">
+                <i class="fas fa-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Add this JavaScript for filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons in the same group
+                    const group = this.parentElement;
+                    group.querySelectorAll('.filter-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    // Add your filter logic here
+                    const filter = this.dataset.filter;
+                    const intensity = this.dataset.intensity;
+
+                    // Filter activities based on selected criteria
+                    filterActivities(filter, intensity);
+                });
+            });
+        });
+
+        function filterActivities(filter, intensity) {
+            const cards = document.querySelectorAll('.activity-card');
+
+            cards.forEach(card => {
+                const category = card.querySelector('.category-tag').textContent.toLowerCase();
+                const cardIntensity = card.querySelector('.intensity-tag')?.textContent.toLowerCase();
+
+                let showCard = true;
+
+                if (filter && filter !== 'all') {
+                    showCard = category.includes(filter.toLowerCase());
+                }
+
+                if (intensity && cardIntensity) {
+                    showCard = showCard && cardIntensity.includes(intensity.toLowerCase());
+                }
+
+                card.style.display = showCard ? 'block' : 'none';
+            });
+        }
+
+        // Add animation for mood updates
+        function updateMood(mood) {
+            const emotionHeader = document.querySelector('.emotion-header');
+            emotionHeader.style.animation = 'pulse 1s';
+
+            // Update emoji and text
+            const moodIndicator = document.querySelector('.emotion-indicator');
+            const moodText = document.querySelector('.emotion-header h2');
+
+            let emoji = '😐';
+            switch(mood.toLowerCase()) {
+                case 'happy':
+                    emoji = '😊';
+                    break;
+                case 'sad':
+                    emoji = '😢';
+                    break;
+                case 'angry':
+                    emoji = '😠';
+                    break;
+                case 'anxious':
+                    emoji = '😰';
+                    break;
+            }
+
+            moodIndicator.textContent = emoji;
+            moodText.textContent = `Your Current Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)}`;
+        }
+
+        // Add search functionality
+        const searchActivities = () => {
+            const searchInput = document.getElementById('activity-search');
+            const searchTerm = searchInput.value.toLowerCase();
+            const activities = document.querySelectorAll('.activity-card');
+
+            activities.forEach(activity => {
+                const title = activity.querySelector('.activity-title').textContent.toLowerCase();
+                const description = activity.querySelector('.activity-description').textContent.toLowerCase();
+                const category = activity.querySelector('.category-tag').textContent.toLowerCase();
+
+                const matches = title.includes(searchTerm) ||
+                              description.includes(searchTerm) ||
+                              category.includes(searchTerm);
+
+                activity.style.display = matches ? 'block' : 'none';
+            });
+        };
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add lazy loading for activity cards
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.activity-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+
+    <style>
+        /* Additional styles for enhanced features */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 5px var(--primary-color);
+        }
+
+        .activity-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .activity-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stat-item {
+                padding: 10px 0;
+                border-bottom: 1px solid var(--background-color);
+            }
+
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1f2937;
+                --card-background: #374151;
+                --text-primary: #f3f4f6;
+                --text-secondary: #d1d5db;
+            }
+
+            .activity-card::before {
+                opacity: 0.8;
+            }
+        }
+    </style>
+
+    <!-- Add search bar -->
+    <div class="search-container">
+        <input
+            type="text"
+            id="activity-search"
+            class="search-input"
+            placeholder="Search activities..."
+            oninput="searchActivities()"
+        >
+    </div>
+
+    <!-- Add activity statistics -->
+    <div class="activity-stats">
+        <div class="stat-item">
+            <div class="stat-value">{{ age_activities|length + emotion_activities|length }}</div>
+            <div class="stat-label">Total Activities</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ emotion_activities|length }}</div>
+            <div class="stat-label">Mood-Based Activities</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ age_activities|length }}</div>
+            <div class="stat-label">Age-Appropriate Activities</div>
+        </div>
+    </div>
+</body>
+</html>

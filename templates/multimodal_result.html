@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal Analysis Results</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--text-color);
+            font-size: 1.8rem;
+            margin-top: 20px;
+        }
+
+        h3 {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            margin-top: 25px;
+        }
+
+        .result-section {
+            background: var(--secondary-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        .confidence-bar {
+            background: #e9ecef;
+            border-radius: 20px;
+            height: 25px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .confidence-fill {
+            background: var(--primary-color);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .visualization {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .visualization img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .suggestions {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s ease;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .result-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Emotion Analysis Results</h1>
+
+        <div class="result-section">
+            <h2>Final Emotion: {{ result.final_emotion|title }}</h2>
+
+            <div class="confidence-bar">
+                <div class="confidence-fill" style="width: {{ result.confidence * 100 }}%"></div>
+            </div>
+            <p>Confidence: {{ "%.2f"|format(result.confidence * 100) }}%</p>
+
+            <h3>Individual Predictions:</h3>
+            <ul>
+                {% for pred in result.individual_predictions %}
+                <li>
+                    <span>{{ pred.source|title }}: {{ pred.emotion|title }}</span>
+                    <span>{{ "%.2f"|format(pred.confidence * 100) }}%</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="visualization">
+                <img src="data:image/png;base64,{{ plot_url }}" alt="Emotion Analysis Visualization">
+            </div>
+
+            {% if suggestions %}
+            <div class="suggestions">
+                <h3>Content Suggestions:</h3>
+                <p>{{ suggestions }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('multimodal_analysis') }}" class="btn">Analyze Another</a>
+    </div>
+</body>
+</html>

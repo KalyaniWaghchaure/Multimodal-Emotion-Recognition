@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Emotion Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color:#85959d;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .info-box h2 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-upload-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .file-upload-btn:hover {
+            background-color: #2980b9;
+        }
+        button[type="submit"] {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+        #file-name {
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a4a6a 100%);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  .navbar ul li {
+    margin: 0 15px;
+    position: relative;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFF;
+    transition: all 0.3s ease;
+  }
+
+  .navbar ul li a:hover::after {
+    width: 70%;
+    left: 15%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  .logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+  }
+
+  .login-btn {
+    background-color: #E74C3C;
+    border-radius: 25px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+  }
+
+  .login-btn:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 0;
+    }
+
+    .navbar ul {
+      margin-right: 20px;
+    }
+
+    .navbar ul li {
+      margin: 0 8px;
+    }
+
+    .navbar ul li a {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+  }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="https://cf-sparkai-live.s3.amazonaws.com/users/2nQiAheRVJuYmhS2sPtGIinTSkC/spark_ai/o_bg-remover-gen_2nQiMZhYEHat4zUrI2WHOqaJ3jg.png" alt="Emotion Recognition Logo">
+    </div>
+    <ul>
+        <li><a href="/" class="active"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="/AboutUs"><i class="fas fa-info-circle"></i>About Us</a></li>
+        <li><a href="/Demo"><i class="fas fa-microchip"></i>Try Demo</a></li>
+        <li><a href="/Blog"><i class="fas fa-blog"></i>Blog</a></li>
+        <li><a href="/Contact"><i class="fas fa-envelope"></i>Contact</a></li>
+        {% if not logged_in %}
+            <li><a href="/login" class="login-btn"><i class="fas fa-sign-in-alt"></i>Login</a></li>
+        {% else %}
+            <li><a href="/profile"><i class="fas fa-user"></i>Profile</a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<h1><br><br></h1>
+
+    <div class="container">
+        <h1>Image Emotion Recognition</h1>
+
+        <div class="info-box">
+            <h2>Upload Guidelines</h2>
+            <p>Please follow these guidelines for best results:</p>
+            <ul>
+                <li>Accepted file types: JPG, JPEG, PNG</li>
+                <li>Maximum file size: 5MB</li>
+                <li>Recommended image resolution: At least 640x480 pixels</li>
+                <li>The image should contain a clear, front-facing portrait</li>
+                <li>Ensure good lighting conditions in the image</li>
+            </ul>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            <label for="file-upload" class="file-upload-btn">Choose Image</label>
+            <input id="file-upload" type="file" name="file" accept=".png,.jpg,.jpeg" required>
+            <div id="file-name"></div>
+            <button type="submit">Upload and Analyze</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('file-upload').addEventListener('change', function() {
+            var fileName = this.files[0].name;
+            document.getElementById('file-name').textContent = 'Selected file: ' + fileName;
+        });
+    </script>
+</body>
+</html>

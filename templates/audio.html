@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speech Emotion Recognition</title>
+</head>
+<body>
+    <h1>Speech Emotion Recognition</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="audio_file" required>
+        <button type="submit">Analyze</button>
+    </form>
+    {% if predicted_emotion %}
+        <h2>Predicted Emotion: {{ predicted_emotion }}</h2>
+    {% endif %}
+</body>
+</html>
